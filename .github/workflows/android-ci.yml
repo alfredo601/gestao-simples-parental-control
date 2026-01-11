@@ -27,26 +27,39 @@ jobs:
       - name: Accept Android SDK licenses
         run: yes | sdkmanager --licenses
 
+      - name: Debug repo layout
+        run: |
+          echo "PWD:" $(pwd)
+          ls -la
+          echo "APP DIR:" && ls -la app || true
+
       - name: Create google-services.json from secret
-        working-directory: gestao_simples_app/app
+        working-directory: app
         env:
           GOOGLE_SERVICES_JSON: ${{ secrets.FIREBASE_GOOGLE_SERVICES_JSON }}
+          GOOGLE_SERVICES_JSON_BASE64: ${{ secrets.FIREBASE_GOOGLE_SERVICES_JSON_BASE64 }}
         run: |
-          if [ -z "$GOOGLE_SERVICES_JSON" ]; then
-            echo "Missing FIREBASE_GOOGLE_SERVICES_JSON secret" && exit 1
+          set -e
+          if [ -n "$GOOGLE_SERVICES_JSON_BASE64" ]; then
+            echo "Writing google-services.json from BASE64 secret"
+            echo "$GOOGLE_SERVICES_JSON_BASE64" | base64 -d > google-services.json
+          elif [ -n "$GOOGLE_SERVICES_JSON" ]; then
+            echo "Writing google-services.json from JSON secret"
+            printf '%s' "$GOOGLE_SERVICES_JSON" > google-services.json
+          else
+            echo "ERROR: Missing secrets. Define FIREBASE_GOOGLE_SERVICES_JSON or FIREBASE_GOOGLE_SERVICES_JSON_BASE64" && exit 1
           fi
-          printf '%s' "$GOOGLE_SERVICES_JSON" > google-services.json
+          echo "google-services.json created:" && ls -la google-services.json
 
       - name: Build Debug APK
         uses: gradle/gradle-build-action@v3
         with:
           gradle-version: 8.2
-          build-root-directory: gestao_simples_app
+          build-root-directory: .
           arguments: :app:assembleDebug
 
       - name: Upload APK artifact
         uses: actions/upload-artifact@v4
         with:
           name: app-debug.apk
-          path: gestao_simples_app/app/build/outputs/apk/debug/app-debug.apk
-
+          path: app/build/outputs/apk/debug/app-debug.apk
