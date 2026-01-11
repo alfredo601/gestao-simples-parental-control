@@ -8,6 +8,7 @@ import android.net.Uri
 import android.os.Bundle
 import android.provider.Settings
 import android.widget.Button
+import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.google.firebase.FirebaseApp
@@ -27,6 +28,7 @@ class MainActivity : AppCompatActivity() {
         val btnEnableAdmin = findViewById<Button>(R.id.btn_enable_admin)
         val btnEnableAccessibility = findViewById<Button>(R.id.btn_enable_accessibility)
         val btnOpenAppSettings = findViewById<Button>(R.id.btn_open_app_settings)
+        val statusText = findViewById<TextView>(R.id.status_text)
 
         btnEnableAdmin.setOnClickListener {
             val intent = Intent(DevicePolicyManager.ACTION_ADD_DEVICE_ADMIN)
@@ -50,5 +52,22 @@ class MainActivity : AppCompatActivity() {
 
         FirebaseApp.initializeApp(this)
         RemoteConfigSync(PrefsManager(this)).start()
+
+        updateStatus(statusText)
+    }
+
+    override fun onResume() {
+        super.onResume()
+        val statusText = findViewById<TextView>(R.id.status_text)
+        updateStatus(statusText)
+    }
+
+    private fun updateStatus(statusText: TextView) {
+        val prefs = PrefsManager(this)
+        val id = prefs.getDeviceId()
+        val pwd = prefs.getChildPassword()
+        val apps = prefs.getBlockedApps()
+        val shortPwd = if (pwd.length > 12) pwd.take(12) + "…" else pwd
+        statusText.text = "Status:\nID: $id\nSenha do App: $shortPwd\nApps bloqueados: ${apps.size}"
     }
 }

@@ -42,4 +42,12 @@
         android:text="Dica: Em Android 13+, apps instalados por download precisam permitir Configurações Restritas na tela do app para habilitar Acessibilidade."
         android:textColor="#666666" />
 
+    <TextView
+        android:id="@+id/status_text"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:text="Status:"
+        android:textColor="#333333" />
+
 </LinearLayout>
