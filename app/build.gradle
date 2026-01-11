@@ -16,15 +16,20 @@ android {
         versionName "1.0"
     }
 
+    def debugKeystorePath = System.getenv("DEBUG_KEYSTORE_PATH") ?: "$projectDir/debug.keystore"
+    def debugKeystoreFile = file(debugKeystorePath)
+
     signingConfigs {
-        debug {
-            storeFile file(System.getenv("DEBUG_KEYSTORE_PATH") ?: "$projectDir/debug.keystore")
-            storePassword System.getenv("DEBUG_KEYSTORE_PASSWORD") ?: "android"
-            keyAlias System.getenv("DEBUG_KEY_ALIAS") ?: "androiddebugkey"
-            keyPassword System.getenv("DEBUG_KEY_PASSWORD") ?: "android"
-        }
         release {
             // Placeholder; will be configured for Play release via secrets
+        }
+        if (debugKeystoreFile.exists()) {
+            debug {
+                storeFile debugKeystoreFile
+                storePassword System.getenv("DEBUG_KEYSTORE_PASSWORD") ?: "android"
+                keyAlias System.getenv("DEBUG_KEY_ALIAS") ?: "androiddebugkey"
+                keyPassword System.getenv("DEBUG_KEY_PASSWORD") ?: "android"
+            }
         }
     }
 
@@ -34,7 +39,9 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
         debug {
-            signingConfig signingConfigs.debug
+            if (signingConfigs.findByName("debug") != null) {
+                signingConfig signingConfigs.debug
+            }
         }
     }
     compileOptions {
