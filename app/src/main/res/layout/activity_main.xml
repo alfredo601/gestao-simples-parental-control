@@ -27,4 +27,19 @@
         android:layout_marginTop="16dp"
         android:text="2. Ativar Monitoramento (Acessibilidade)" />
 
+    <Button
+        android:id="@+id/btn_open_app_settings"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:text="3. Abrir Configurações do App (Permitir Configurações Restritas)" />
+
+    <TextView
+        android:id="@+id/permission_hint"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:text="Dica: Em Android 13+, apps instalados por download precisam permitir Configurações Restritas na tela do app para habilitar Acessibilidade."
+        android:textColor="#666666" />
+
 </LinearLayout>

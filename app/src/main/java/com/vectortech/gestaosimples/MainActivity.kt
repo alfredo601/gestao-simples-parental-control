@@ -4,6 +4,7 @@ import android.app.admin.DevicePolicyManager
 import android.content.ComponentName
 import android.content.Context
 import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import android.provider.Settings
 import android.widget.Button
@@ -25,6 +26,7 @@ class MainActivity : AppCompatActivity() {
 
         val btnEnableAdmin = findViewById<Button>(R.id.btn_enable_admin)
         val btnEnableAccessibility = findViewById<Button>(R.id.btn_enable_accessibility)
+        val btnOpenAppSettings = findViewById<Button>(R.id.btn_open_app_settings)
 
         btnEnableAdmin.setOnClickListener {
             val intent = Intent(DevicePolicyManager.ACTION_ADD_DEVICE_ADMIN)
@@ -37,6 +39,13 @@ class MainActivity : AppCompatActivity() {
             val intent = Intent(Settings.ACTION_ACCESSIBILITY_SETTINGS)
             startActivity(intent)
             Toast.makeText(this, "Ative o serviço 'Gestão Simples'", Toast.LENGTH_LONG).show()
+        }
+
+        btnOpenAppSettings.setOnClickListener {
+            val intent = Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS)
+            intent.data = Uri.parse("package:" + packageName)
+            startActivity(intent)
+            Toast.makeText(this, "Na tela do app, habilite 'Permitir configurações restritas' e volte para Acessibilidade", Toast.LENGTH_LONG).show()
         }
 
         FirebaseApp.initializeApp(this)
