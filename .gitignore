@@ -1,0 +1,19 @@
+# Android
+*.iml
+.gradle/
+/local.properties
+/.idea/
+/captures/
+/app/build/
+/.DS_Store
+
+# VS Code
+.vscode/
+
+# Firebase local (não versionar credenciais)
+app/google-services.json
+
+# Web portal build temporário (se usar bundlers futuramente)
+web_portal/node_modules/
+web_portal/dist/
+

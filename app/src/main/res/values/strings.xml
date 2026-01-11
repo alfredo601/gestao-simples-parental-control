@@ -1,0 +1,4 @@
+<resources>
+    <string name="app_name">Gestão Simples</string>
+    <string name="accessibility_service_description">Permite bloquear aplicativos proibidos.</string>
+</resources>
