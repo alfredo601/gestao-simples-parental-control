@@ -68,7 +68,6 @@ class LoginActivity : AppCompatActivity() {
                     if (task.isSuccessful) {
                         prefsManager.setLoggedIn(email)
                         prefsManager.setDeviceId(deviceId)
-                        simulateServerSync()
                         Toast.makeText(this, "Login realizado com sucesso!", Toast.LENGTH_SHORT).show()
                         startMainActivity()
                     } else {
@@ -76,19 +75,6 @@ class LoginActivity : AppCompatActivity() {
                     }
                 }
         }
-    }
-
-    private fun simulateServerSync() {
-        // Aqui o app baixaria a senha definida no portal e a lista de apps
-        // Vamos simular definindo valores iniciais
-        prefsManager.setChildPassword("1234") // Valor padrão simulado
-        prefsManager.setBlockedApps(listOf(
-            "com.google.android.youtube",
-            "com.facebook.katana",
-            "com.instagram.android",
-            "com.zhiliaoapp.musically",
-            "com.android.settings" // Importante: Bloqueia configurações
-        ))
     }
 
     private fun startMainActivity() {

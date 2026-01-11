@@ -29,13 +29,7 @@ class PrefsManager(context: Context) {
 
     fun getBlockedApps(): List<String> {
         val set = prefs.getStringSet(KEY_BLOCKED_APPS, null)
-        return set?.toList() ?: listOf(
-            "com.google.android.youtube",
-            "com.facebook.katana",
-            "com.instagram.android",
-            "com.zhiliaoapp.musically", // TikTok
-            "com.android.settings" // Bloquear configurações para evitar desinstalação
-        )
+        return set?.toList() ?: emptyList()
     }
 
     fun setLoggedIn(email: String) {
