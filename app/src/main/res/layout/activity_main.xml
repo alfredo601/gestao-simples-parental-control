@@ -42,6 +42,13 @@
         android:text="Dica: Em Android 13+, apps instalados por download precisam permitir Configurações Restritas na tela do app para habilitar Acessibilidade."
         android:textColor="#666666" />
 
+    <Button
+        android:id="@+id/btn_disable_blocking"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:text="Desativar bloqueio por 15 minutos" />
+
     <TextView
         android:id="@+id/status_text"
         android:layout_width="match_parent"

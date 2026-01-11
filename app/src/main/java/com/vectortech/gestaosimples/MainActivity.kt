@@ -28,6 +28,7 @@ class MainActivity : AppCompatActivity() {
         val btnEnableAdmin = findViewById<Button>(R.id.btn_enable_admin)
         val btnEnableAccessibility = findViewById<Button>(R.id.btn_enable_accessibility)
         val btnOpenAppSettings = findViewById<Button>(R.id.btn_open_app_settings)
+        val btnDisableBlocking = findViewById<Button>(R.id.btn_disable_blocking)
         val statusText = findViewById<TextView>(R.id.status_text)
 
         btnEnableAdmin.setOnClickListener {
@@ -48,6 +49,12 @@ class MainActivity : AppCompatActivity() {
             intent.data = Uri.parse("package:" + packageName)
             startActivity(intent)
             Toast.makeText(this, "Na tela do app, habilite 'Permitir configurações restritas' e volte para Acessibilidade", Toast.LENGTH_LONG).show()
+        }
+
+        btnDisableBlocking.setOnClickListener {
+            PrefsManager(this).disableBlockingForMinutes(15)
+            Toast.makeText(this, "Bloqueio desativado por 15 minutos", Toast.LENGTH_LONG).show()
+            updateStatus(statusText)
         }
 
         FirebaseApp.initializeApp(this)

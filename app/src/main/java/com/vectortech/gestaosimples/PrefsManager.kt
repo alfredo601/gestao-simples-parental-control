@@ -12,6 +12,7 @@ class PrefsManager(context: Context) {
         private const val KEY_IS_LOGGED_IN = "is_logged_in"
         private const val KEY_PARENT_EMAIL = "parent_email"
         private const val KEY_DEVICE_ID = "device_id"
+        private const val KEY_DISABLE_UNTIL = "disable_until"
     }
 
     fun setChildPassword(password: String) {
@@ -19,7 +20,7 @@ class PrefsManager(context: Context) {
     }
 
     fun getChildPassword(): String {
-        return prefs.getString(KEY_CHILD_PASSWORD, "1234") ?: "1234"
+        return prefs.getString(KEY_CHILD_PASSWORD, "") ?: ""
     }
 
     fun setBlockedApps(packageNames: List<String>) {
@@ -57,5 +58,20 @@ class PrefsManager(context: Context) {
 
     fun logout() {
         prefs.edit().clear().apply()
+    }
+
+    fun disableBlockingForMinutes(minutes: Int) {
+        val until = System.currentTimeMillis() + minutes * 60_000L
+        prefs.edit().putLong(KEY_DISABLE_UNTIL, until).apply()
+    }
+
+    fun isBlockingEnabled(): Boolean {
+        val until = prefs.getLong(KEY_DISABLE_UNTIL, 0L)
+        if (until > System.currentTimeMillis()) return false
+        val apps = getBlockedApps()
+        val pwd = getChildPassword()
+        if (apps.isEmpty()) return false
+        if (pwd.isEmpty()) return false
+        return true
     }
 }

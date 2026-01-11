@@ -25,9 +25,20 @@ class MyAccessibilityService : AccessibilityService() {
             Log.d("GestaoSimples", "App aberto: $packageName")
 
             if (packageName != null) {
+                // Safety: if blocking is disabled or not configured yet, do nothing
+                if (!prefsManager.isBlockingEnabled()) return
+
                 val blockedApps = prefsManager.getBlockedApps()
+                // Always allow Settings when not configured
+                val safeAllowWhenUnconfigured = setOf(
+                    "com.android.settings",
+                    "com.google.android.packageinstaller"
+                )
                 if (blockedApps.contains(packageName)) {
+                    // If package is Settings and user needs to disable admin, still block only when configured
                     showLockScreen()
+                } else if (safeAllowWhenUnconfigured.contains(packageName) && blockedApps.isEmpty()) {
+                    return
                 }
             }
         }
